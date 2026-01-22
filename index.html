@@ -1,71 +1,239 @@
-<html>
-    <head> 
-      <title> RipassAPP </title> 
-    </head>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RipassApp</title>
 
-    <body>
-       
-        <nav>
-            <h2> Materie </h2>
-            <ul>
-                <li> <a href="index.html"> Italiano/Storia </a> </li>
-                <li> <a href="index.html"> Informatica </a> </li>
-                <li> <a href="index.html"> Economia Aziendale </a> </li>
-                <li> <a href="index.html"> Diritto/Economia Pubblica  </a> </li>
-                <li> <a href="index.html"> Matematica </a> </li>
-            </ul>
-        </nav>
-        <section>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Quicksand:wght@500&display=swap" rel="stylesheet">
 
-            
+<style>
+body{
+    font-family:'Quicksand',sans-serif;
+    background:linear-gradient(135deg,#ffe6f2,#f3e8ff);
+    text-align:center;
+    padding:20px;
+}
+h1{
+    font-family:'Playfair Display',serif;
+    color:#b05aa3;
+}
+#subjects{
+    margin:15px 0;
+}
+.subject-btn{
+    padding:10px 16px;
+    margin:5px;
+    border:none;
+    border-radius:20px;
+    background:#f7c6e6;
+    color:#6a1b5d;
+    cursor:pointer;
+    box-shadow:0 3px 6px rgba(0,0,0,.2);
+}
+.subject-btn.active{
+    background:#d98bd6;
+    color:white;
+}
+#flashcard-container{
+    width:360px;
+    height:240px;
+    perspective:1000px;
+    margin:20px auto;
+}
+.flashcard{
+    width:100%;
+    height:100%;
+    background:#fff0fa;
+    border-radius:15px;
+    box-shadow:0 6px 12px rgba(0,0,0,.25);
+    cursor:pointer;
+    transform-style:preserve-3d;
+    transition:transform .6s;
+    position:relative;
+}
+.flashcard.flip{
+    transform:rotateY(180deg);
+}
+.side{
+    position:absolute;
+    width:100%;
+    height:100%;
+    backface-visibility:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    box-sizing:border-box;
+    font-size:16px;
+    color:#6a1b5d;
+}
+.back{
+    transform:rotateY(180deg);
+    background:#fce4f7;
+}
+#cardNumbers{
+    display:grid;
+    grid-template-columns:repeat(13,1fr);
+    gap:6px;
+    max-width:420px;
+    margin:15px auto;
+}
+.card-number{
+    padding:8px 0;
+    background:white;
+    border:1px solid #b05aa3;
+    border-radius:6px;
+    cursor:pointer;
+}
+.card-number.active{
+    background:#b05aa3;
+    color:white;
+}
+</style>
+</head>
 
+<body>
 
+<h1>✨ RipassApp ✨</h1>
 
-        </section>
+<div id="subjects">
+    <button class="subject-btn active" onclick="setSubject('italiano',this)">Italiano / Storia</button>
+    <button class="subject-btn" onclick="setSubject('informatica',this)">Informatica</button>
+    <button class="subject-btn" onclick="setSubject('economia',this)">Economia Aziendale</button>
+    <button class="subject-btn" onclick="setSubject('diritto',this)">Diritto / Economia Pubblica</button>
+    <button class="subject-btn" onclick="setSubject('matematica',this)">Matematica</button>
+</div>
 
-        <footer>
-            <p>
-            Santo, santo
-            Osanna
-            Santo, santo
-            Osanna
-            Osanna eh
-            Osanna eh
-            Osanna a Cristo Signor (Osanna eh)
-            Osanna eh
-            Osanna eh
-            Osanna a Cristo Signor
-            I cieli e la terra, o Signore
-            Sono pieni di Te
-            I cieli e la terra, o Signore
-            Sono pieni di Te
-            Osanna eh
-            Osanna eh
-            Osanna a Cristo Signor (Osanna eh)
-            Osanna eh
-            Osanna eh
-            Osanna a Cristo Signor
-            Benedetto colui che viene
-            Nel nome del Signor
-            Benedetto colui che viene
-            Nel nome del Signor
-            Osanna eh
-            Osanna eh
-            Osanna a Cristo Signor (Osanna eh)
-            Osanna eh
-            Osanna eh
-            Osanna a Cristo Signor
-            </p>
-        </footer>
+<div id="flashcard-container">
+    <div class="flashcard" onclick="flipCard()">
+        <div class="side front" id="front"></div>
+        <div class="side back" id="back"></div>
+    </div>
+</div>
 
+<div id="cardNumbers"></div>
 
+<script>
+const data = {
 
+italiano: [
+{q:"Caratteristiche del romanzo del Novecento?",a:"Crisi dell’io, tempo non lineare, narratore soggettivo."},
+{q:"Cos'è il Decadentismo?",a:"Rifiuto del positivismo, irrazionalismo."},
+{q:"Pascoli: poetica del fanciullino?",a:"Visione ingenua della realtà."},
+{q:"D’Annunzio: estetismo?",a:"La vita come opera d’arte."},
+{q:"Svevo: l’inetto?",a:"Incapace di agire nella società."},
+{q:"Pirandello: relativismo?",a:"Identità multiple."},
+{q:"Cause Prima Guerra Mondiale?",a:"Nazionalismo, imperialismo, alleanze."},
+{q:"Conseguenze primo dopoguerra?",a:"Crisi economica e sociale."},
+{q:"Caratteri dei totalitarismi?",a:"Partito unico, propaganda, repressione."},
+{q:"Seconda Guerra Mondiale?",a:"1939–1945."},
+{q:"Guerra Fredda?",a:"Contrapposizione USA–URSS."},
+{q:"Boom economico italiano?",a:"Anni ’50–’60."},
+{q:"Costituzione italiana?",a:"Entra in vigore nel 1948."}
+],
 
+informatica: [
+{q:"Sistema informativo aziendale?",a:"Dati, procedure e tecnologie."},
+{q:"Modello relazionale?",a:"Dati organizzati in tabelle."},
+{q:"Chiave primaria?",a:"Identifica univocamente una tupla."},
+{q:"Chiave esterna?",a:"Collega tabelle."},
+{q:"SQL?",a:"Linguaggio per database."},
+{q:"SELECT?",a:"Estrae dati."},
+{q:"WHERE?",a:"Imposta condizioni."},
+{q:"JOIN?",a:"Unisce tabelle."},
+{q:"GROUP BY?",a:"Raggruppa risultati."},
+{q:"DBMS?",a:"Gestione dei database."},
+{q:"Programmazione modulare?",a:"Codice diviso in moduli."},
+{q:"Funzione?",a:"Blocco riutilizzabile."},
+{q:"Diagramma E-R?",a:"Modello concettuale dei dati."}
+],
 
+economia: [
+{q:"Sistema informativo aziendale?",a:"Supporta gestione e decisioni."},
+{q:"Bilancio d’esercizio?",a:"SP, CE, Nota integrativa."},
+{q:"Costi fissi?",a:"Non dipendono dalla produzione."},
+{q:"Costi variabili?",a:"Dipendono dal volume."},
+{q:"Break even point?",a:"Pareggio costi-ricavi."},
+{q:"ROI?",a:"Redditività capitale investito."},
+{q:"ROE?",a:"Redditività capitale proprio."},
+{q:"Leva finanziaria?",a:"Uso capitale di terzi."},
+{q:"Budget?",a:"Programmazione aziendale."},
+{q:"Contabilità generale?",a:"Fatti esterni."},
+{q:"Contabilità analitica?",a:"Analisi dei costi."},
+{q:"Scritture di assestamento?",a:"Adeguano valori."},
+{q:"Ammortamento?",a:"Ripartizione del costo."}
+],
 
+diritto: [
+{q:"Stato di diritto?",a:"Supremazia della legge."},
+{q:"Art. 1 Costituzione?",a:"Italia Repubblica democratica."},
+{q:"Art. 3 Costituzione?",a:"Uguaglianza formale e sostanziale."},
+{q:"Forma di Stato italiana?",a:"Democratica."},
+{q:"Forma di governo?",a:"Parlamentare."},
+{q:"Parlamento?",a:"Funzione legislativa."},
+{q:"Governo?",a:"Funzione esecutiva."},
+{q:"Magistratura?",a:"Funzione giudiziaria."},
+{q:"Spesa pubblica?",a:"Interventi dello Stato."},
+{q:"Entrate tributarie?",a:"Imposte e tasse."},
+{q:"IRPEF?",a:"Imposta progressiva."},
+{q:"Deficit pubblico?",a:"Spese > entrate."},
+{q:"Debito pubblico?",a:"Debiti dello Stato."}
+],
 
+matematica: [
+{q:"Interesse semplice?",a:"I = C·r·t"},
+{q:"Interesse composto?",a:"Interessi su interessi."},
+{q:"Montante?",a:"Capitale finale."},
+{q:"Valore attuale?",a:"Capitale iniziale."},
+{q:"Sconto commerciale?",a:"Riduzione anticipata."},
+{q:"Sconto razionale?",a:"Basato sul valore attuale."},
+{q:"Rendita?",a:"Pagamenti periodici."},
+{q:"Rendita posticipata?",a:"Pagamento a fine periodo."},
+{q:"Rendita anticipata?",a:"Pagamento a inizio periodo."},
+{q:"Funzione esponenziale?",a:"y = a·b^x"},
+{q:"Logaritmo?",a:"Inverso dell’esponenziale."},
+{q:"Sistema lineare?",a:"Più equazioni."},
+{q:"Studio di funzione?",a:"Analisi grafico."}
+]
 
+};
 
+let subject="italiano";
+let index=0;
 
-    </body>
+function setSubject(s,btn){
+    subject=s; index=0;
+    document.querySelectorAll(".subject-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    createNumbers(); showCard();
+}
+function showCard(){
+    document.querySelector(".flashcard").classList.remove("flip");
+    front.textContent=data[subject][index].q;
+    back.textContent=data[subject][index].a;
+    updateActive();
+}
+function flipCard(){
+    document.querySelector(".flashcard").classList.toggle("flip");
+}
+function createNumbers(){
+    cardNumbers.innerHTML="";
+    data[subject].forEach((_,i)=>{
+        const d=document.createElement("div");
+        d.textContent=i+1;
+        d.className="card-number";
+        d.onclick=()=>{index=i;showCard();};
+        cardNumbers.appendChild(d);
+    });
+}
+function updateActive(){
+    document.querySelectorAll(".card-number").forEach((el,i)=>{
+        el.classList.toggle("active",i===index);
+    });
+}
+createNumbers(); showCard();
+</script>
+
+</body>
 </html>
